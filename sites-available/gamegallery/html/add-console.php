@@ -7,10 +7,12 @@
  *                system to the gallery.
  *       VERSION: 1.0
  *****************************************************************************/
+include 'conf/dbconfig.php';
 ?>
 
 
 <!-- Begin the html document here. -->
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -96,11 +98,25 @@
                                     max-length="500" required>
                                 </textarea>
                             </label>
-                        </fieldset>
+                            <label>Select a Manufacturer: 
+                                <select name="manufacturer">
+                                    <option value="">Select a manufacturer</option>
+                                    <?php
+                                    // Connect to database
+                                    $connection = mysqli_connect($host, $dbname, $username, $password);
 
+                                    // Get list of manufacturers from console-manufacturer table.
+                                    $sql = "SELECT * FROM 'console-manufacturer'";
+                                    $all_manufacturers = mysqli_query($connection, $sql);
+                                    while ($manufacturers = mysqli_fetch_array($all_manufacturers, MYSQLI_ASSOC));
+                                    ?>
+                                    <option value="<?php echo $manufacturers['name'];?>"
+                                    <!-- <?php echo $manufacturers['name']; ?> -->
+                                </select>
+                            </label>
+                        </fieldset>
                     </form>
                 </div>
-                
                 <hr> 
             </div>
 
@@ -113,10 +129,6 @@
                     <p><a href="../../../index.php">Home Site</a></p>
                 </div>
             </footer>
-
-            
-
         </div>
-        
     </body>
 </html>
