@@ -10,9 +10,7 @@
 require 'conf/dbconfig.php';
 ?>
 
-
 <!-- Begin the html document here. -->
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -88,10 +86,13 @@ require 'conf/dbconfig.php';
                 <div>
                     <form>
                         <fieldset>
+                            <!-- Get name of console from user. -->
                             <label>Name of Console: 
                             <input class="input_styles" type="text" 
                                 name="console-name" required/>
                             </label>
+
+                            <!-- Ask the user to enter a description. -->
                             <label>Description:
                                 <textarea class="input_styles" 
                                     name="console-description" rows="3" cols="50" 
@@ -99,6 +100,7 @@ require 'conf/dbconfig.php';
                                 </textarea>
                             </label>
                             <?php
+
                             // Establish and test connection.  Print message only when there is a failure.
                             try {
                                 $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -106,8 +108,8 @@ require 'conf/dbconfig.php';
                                 die("Could not connect to the database $dbname :" . $pe->getMessage());
                             }
                            
-                            // SQL statement
-                            $sql = "SELECT name FROM manufacturer";
+                            // Perform SQL query and sort by name in ascending order.
+                            $sql = "SELECT name FROM manufacturer order by name ASC";
 
                             // Prepare statement and fetch results.  Report error if exception is thrown.
                             try {
@@ -115,14 +117,20 @@ require 'conf/dbconfig.php';
                                 $stmt -> execute();
                                 $results = $stmt -> fetchAll();
                             }
-                            catch (Exception $ex)
-                            {
+                            catch (Exception $ex) {
                                 echo ($ex -> getMessage());
                             }
                             ?>
+
+                            <!-- Ask the user to select the manufacturer based on list provided
+                            by the database. -->
                             <label>Select a Manufacturer: 
                                 <select name="manufacturers">
-                                   <option value="" selected>Select a manufacturer</option> -->
+                                    <!-- Setup pre-selected value as message asking user to
+                                    select a manufacturer. -->
+                                    <option value="" selected>Select a manufacturer</option> -->
+                                    
+                                    <!-- Populate dropdown menu using information from database. -->
                                     <?php  
                                     foreach ($results as $rows) { 
                                         $manufacturer_name = $rows['name'];
