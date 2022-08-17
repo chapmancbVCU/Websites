@@ -14,5 +14,5 @@
     $host = "localhost";
     $dbname = "VideoGameGallery";
     $username = "gamer";
-    $password = "V1deogames";
+    $password = "enter_password_here";
 ?>
