@@ -7,7 +7,7 @@
  *                system to the gallery.
  *       VERSION: 1.0
  *****************************************************************************/
-include 'conf/dbconfig.php';
+require 'conf/dbconfig.php';
 ?>
 
 
@@ -98,21 +98,38 @@ include 'conf/dbconfig.php';
                                     max-length="500" required>
                                 </textarea>
                             </label>
-                            <label>Select a Manufacturer: 
-                                <select name="manufacturer">
-                                    <option value="">Select a manufacturer</option>
-                                    <?php
-                                    // Connect to database
-                                    $connection = mysqli_connect($host, $dbname, $username, $password);
+                            <?php
+                            // Establish and test connection.  Print message only when there is a failure.
+                            try {
+                                $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+                            } catch (PDOException $pe) {
+                                die("Could not connect to the database $dbname :" . $pe->getMessage());
+                            }
+                           
+                            // SQL statement
+                            $sql = "SELECT name FROM manufacturer";
 
-                                    // Get list of manufacturers from console-manufacturer table.
-                                    $sql = "SELECT * FROM 'console-manufacturer'";
-                                    $all_manufacturers = mysqli_query($connection, $sql);
-                                    while ($manufacturers = mysqli_fetch_array($all_manufacturers, MYSQLI_ASSOC));
+                            // Prepare statement and fetch results.  Report error if exception is thrown.
+                            try {
+                                $stmt = $conn -> prepare($sql);
+                                $stmt -> execute();
+                                $results = $stmt -> fetchAll();
+                            }
+                            catch (Exception $ex)
+                            {
+                                echo ($ex -> getMessage());
+                            }
+                            ?>
+                            <label>Select a Manufacturer: 
+                                <select name="manufacturers">
+                                   <option value="" selected>Select a manufacturer</option> -->
+                                    <?php  
+                                    foreach ($results as $rows) { 
+                                        $manufacturer_name = $rows['name'];
+                                        echo "<option value='$manufacturer_name'>$manufacturer_name</option>";
+                                    }
                                     ?>
-                                    <option value="<?php echo $manufacturers['name'];?>"
-                                    <!-- <?php echo $manufacturers['name']; ?> -->
-                                </select>
+                                </select> 
                             </label>
                         </fieldset>
                     </form>

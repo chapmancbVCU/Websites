@@ -13,6 +13,6 @@
     // Database configuratiion
     $host = "localhost";
     $dbname = "VideoGameGallery";
-    $username = "games";
-    $password = "V1deog@mes";
+    $username = "gamer";
+    $password = "V1deogames";
 ?>
